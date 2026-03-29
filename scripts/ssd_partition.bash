@@ -2,13 +2,14 @@
 set -euo pipefail
 
 # === Configuration ===
-DISK="/dev/sda"                    # change to your SSD device
+DISK="/dev/sda"
 EFI_SIZE="512MiB"
 EFI_PART="${DISK}1"
 ROOT_PART="${DISK}2"
-ROOT_LABEL="nixos"
+ROOT_LABEL="NIXOS_ROOT"
+EFI_LABEL="NIXOS_BOOT"
 MOUNT_POINT="/mnt"
-SWAPFILE_SIZE_GB=2                 # swapfile size in GB (set 0 to skip)
+SWAPFILE_SIZE_GB=4
 
 # === Safety check ===
 if [ "$(id -u)" -ne 0 ]; then
@@ -41,14 +42,15 @@ sleep 1
 partprobe "$DISK"
 
 # Format partitions
-mkfs.vfat -F32 -n EFI "$EFI_PART"
+mkfs.vfat -F32 -n "$EFI_PART" "$EFI_PART"
 mkfs.ext4 -L "$ROOT_LABEL" "$ROOT_PART"
 
 # Mount root and EFI
 mkdir -p "$MOUNT_POINT"
 mount "$ROOT_PART" "$MOUNT_POINT"
 mkdir -p "$MOUNT_POINT/boot"
-mount "$EFI_PART" "$MOUNT_POINT/boot"
+mkdir -p "$MOUNT_POINT/boot/firmware" || true
+mount "$EFI_PART" "$MOUNT_POINT/boot/firmware"
 
 # Create swapfile if requested
 if [ "$SWAPFILE_SIZE_GB" -gt 0 ]; then
@@ -63,9 +65,7 @@ fi
 # Summary
 echo "Partitioning and formatting complete."
 echo "Root mounted at $MOUNT_POINT (label: $ROOT_LABEL)"
-echo "EFI mounted at $MOUNT_POINT/boot"
+echo "EFI mounted at $MOUNT_POINT/boot/firmware (label: $EFI_LABEL)"
 if [ "$SWAPFILE_SIZE_GB" -gt 0 ]; then
   echo "Swapfile placed at $SWAPFILE"
 fi
-
-echo "Next: proceed with NixOS install using --root $MOUNT_POINT and your flake."
