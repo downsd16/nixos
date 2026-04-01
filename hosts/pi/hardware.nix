@@ -6,12 +6,12 @@
 
   # Typical Pi firmware mount point
   fileSystems."/" = {
-    device = "/dev/disk/by-label/NIXOS_ROOT";
+    device = "/dev/disk/by-label/NIXROOT";
     fsType = "ext4";
   };
 
   fileSystems."/boot/firmware" = {
-    device = "/dev/disk/by-label/NIXOS_BOOT";
+    device = "/dev/disk/by-label/NIXBOOT";
     fsType = "vfat";
   };
 

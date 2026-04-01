@@ -1,0 +1,23 @@
+PowerShell:
+Find and unmount (replace # with drive number)
+diskpart -> list disk
+Get-Disk -Number # | Set-Disk -IsOffline $true
+wsl --mount \\.\PHYSICALDRIVE# --bare
+
+WSL2 Commands:
+Follow UEFI or DOS instructions:
+https://nixos.wiki/wiki/NixOS_Installation_Guide
+
+sudo mkfs.fat -F 32 /dev/sda1
+sudo fatlabel /dev/sda1 NIXBOOT
+sudo mkfs.ext4 /dev/sda2 -L NIXROOT
+
+NixOS USB Boot:
+sudo mount /dev/disk/by-label/NIXROOT /mnt
+sudo mkdir -p /mnt/boot
+sudo mount /dev/disk/by-label/NIXBOOT /mnt/boot
+
+sudo dd if=/dev/zero of=/mnt/.swapfile bs=1024 count=2097152 # 2GB size
+sudo chmod 600 /mnt/.swapfile
+sudo mkswap /mnt/.swapfile
+sudo swapon /mnt/.swapfile

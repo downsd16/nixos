@@ -5,7 +5,6 @@
     ../../modules/common.nix
     ../../modules/docker-swarm-join.nix
     ../../modules/hostnamer.nix
-    ../../modules/rpi-auto-label.nix
     ./hardware.nix
   ];
 
