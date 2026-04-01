@@ -3,7 +3,7 @@
 {
   imports = [
     ../../modules/common.nix
-    ../../modules/docker-swarm-join.nix
+    #../../modules/docker-swarm-join.nix
     ./hardware.nix
   ];
 
