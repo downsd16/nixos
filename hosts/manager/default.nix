@@ -15,11 +15,11 @@
   networking.firewall.allowedUDPPorts = [ 7946 4789 ];
 
   # Swarm manager auto-init (one-time)
-  services.dockerSwarmBootstrap = {
-    enable = true;
-    role = "manager";
-    initIfManager = true;
-    openFirewall = true;
+  # services.dockerSwarmBootstrap = {
+    # enable = true;
+    # role = "manager";
+    # initIfManager = true;
+    # openFirewall = true;
     # advertiseAddr = "10.0.0.10";
-  };
+  # };
 }
